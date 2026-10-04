@@ -5,8 +5,8 @@ public class RateLimiter implements AutoCloseable {
     private static final class State { int count; long windowStart; long lastAccess; }
 
     private final ConcurrentHashMap<String, State> states = new ConcurrentHashMap<>();
-    private volatile int countLimit;
-    private volatile long windowNanos;
+    private final int countLimit;
+    private final long windowNanos;
     private final long idleNanos;
     private final ScheduledExecutorService sweeper =
             Executors.newSingleThreadScheduledExecutor(r -> {
@@ -48,7 +48,6 @@ public class RateLimiter implements AutoCloseable {
         final long now = System.nanoTime();
         for (String key : states.keySet()) {
             // check and remove atomically under that key's lock
-            //System.out.println("Removed");
             states.computeIfPresent(key, (k, s) -> {
                 if (now - s.lastAccess > idleNanos) {
                     System.out.println("removed " + k);

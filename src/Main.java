@@ -1,9 +1,8 @@
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) {
         //thread-safe in-memory Rate Limiter from scratch.
         try (RateLimiter limiter = new RateLimiter(3, 10, 20)) {
             ExecutorService executor = Executors.newFixedThreadPool(4);
